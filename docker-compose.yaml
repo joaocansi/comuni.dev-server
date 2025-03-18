@@ -1,0 +1,39 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres-container
+    restart: always
+    environment:
+      POSTGRES_USER: devgather
+      POSTGRES_PASSWORD: devgather404832894
+      POSTGRES_DB: devgather
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # app:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   container_name: app-container
+  #   restart: always
+  #   depends_on:
+  #     - postgres
+  #   env_file:
+  #     - .env
+  #     - .env.local
+  #   environment:
+  #     POSTGRES_USER: ${POSTGRES_USER}
+  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  #     POSTGRES_DB: ${POSTGRES_DB}
+  #   ports:
+  #     - "80:3000"
+  #   volumes:
+  #     - ./app:/usr/src/app
+
+volumes:
+  postgres_data:
+    driver: local
