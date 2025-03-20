@@ -33,7 +33,7 @@ resource "vercel_project" "frontend" {
 
   environment = [
     {
-      key = "SERVER_URL"
+      key = "NEXT_PUBLIC_SERVER_URL"
       value = render_web_service.web.url
     }
   ]
