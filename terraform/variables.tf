@@ -22,3 +22,13 @@ variable "better_auth_secret" {
   type    = string
   default = ""
 }
+
+variable "frontend_domain" {
+  type    = string
+  default = ""
+}
+
+variable "frontend_url" {
+  type    = string
+  default = ""
+}
