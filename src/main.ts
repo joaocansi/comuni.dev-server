@@ -11,12 +11,15 @@ import { auth } from './@shared/auth';
 import { db } from './@shared/db';
 import { AppErrorExceptionFilter } from './@shared/filters/app-error.exception-filter';
 
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 async function bootstrap() {
   const adapter = express();
 
   adapter.use(
     cors({
-      origin: 'http://localhost:8080',
+      origin: process.env.FRONTEND_URL,
       methods: ['GET', 'POST', 'PUT', 'DELETE'],
       credentials: true,
     }),
@@ -28,7 +31,7 @@ async function bootstrap() {
     new ExpressAdapter(adapter),
   );
   app.enableCors({
-    origin: 'http://localhost:8080',
+    origin: process.env.FRONTEND_URL,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
   });
