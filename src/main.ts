@@ -17,6 +17,8 @@ dotenv.config();
 async function bootstrap() {
   const adapter = express();
 
+  console.log(process.env.BETTER_AUTH_URL);
+
   adapter.use(
     cors({
       origin: process.env.FRONTEND_URL,
