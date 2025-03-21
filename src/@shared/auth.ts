@@ -19,6 +19,11 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
+  advanced: {
+    defaultCookieAttributes: {
+      sameSite: 'None',
+    },
+  },
   session: {
     cookieCache: {
       enabled: true,
