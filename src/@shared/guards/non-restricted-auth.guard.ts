@@ -8,6 +8,8 @@ export class NonRestrictedAuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
+    console.log(fromNodeHeaders(request.headers));
+
     const session = await auth.api.getSession({
       headers: fromNodeHeaders(request.headers),
     });
