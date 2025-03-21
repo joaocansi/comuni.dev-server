@@ -24,5 +24,6 @@ export const auth = betterAuth({
       sameSite: 'None',
       secure: false,
     },
+    useSecureCookies: false,
   },
 });
