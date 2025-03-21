@@ -31,17 +31,26 @@ resource "vercel_project" "frontend" {
   name      = "comunidevs-teste"
   framework = "nextjs"
 
-  environment = [
-    {
-      key = "NEXT_PUBLIC_SERVER_URL"
-      value = render_web_service.web.url
-    }
-  ]
-
   git_repository = {
     type = "github"
     repo = "joaocansi/comuni.dev-client"
   }
+}
+
+resource "vercel_project_environment_variables" "frontend_environment" {
+  project_id = vercel_project.frontend.id
+  variables = [
+    {
+      key    = "NEXT_PUBLIC_SERVER_URL"
+      value  = render_web_service.web.url
+      target = ["production", "preview"]
+    },
+    {
+      key    = "NEXT_PUBLIC_CLIENT_URL"
+      value  = var.frontend_url
+      target = ["production", "preview"]
+    },
+  ]
 }
 
 resource "vercel_project_domain" "frontend_domain" {
@@ -60,13 +69,13 @@ resource "render_web_service" "web" {
   name               = "terraform-web-service"
   plan               = "starter"
   region             = "oregon"
-  start_command      = "npm run start:prod" 
+  start_command      = "export BETTER_AUTH_URL=$RENDER_EXTERNAL_URL && npm run start:prod" 
 
   runtime_source = {
     native_runtime = {
       auto_deploy   = true
       branch        = "main"
-      build_command = "npm install --legacy-peer-deps && npm run build"
+      build_command = "npm install --legacy-peer-deps && npm run build && npx prisma generate && npx prisma db push"
       build_filter = {
         paths         = ["src/**"]
       }
