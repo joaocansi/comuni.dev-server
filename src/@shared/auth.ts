@@ -23,5 +23,6 @@ export const auth = betterAuth({
     defaultCookieAttributes: {
       sameSite: 'None',
     },
+    disableCSRFCheck: true,
   },
 });
