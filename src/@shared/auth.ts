@@ -23,7 +23,7 @@ export const auth = betterAuth({
     defaultCookieAttributes: {
       sameSite: 'None',
     },
-    useSecureCookies: true,
+    useSecureCookies: false,
   },
   session: {
     cookieCache: {
