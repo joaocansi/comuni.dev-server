@@ -25,6 +25,7 @@ export const auth = betterAuth({
     },
     defaultCookieAttributes: {
       sameSite: 'None',
+      domain: '.joaocansi.site',
     },
   },
 });
