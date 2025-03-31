@@ -1,15 +1,11 @@
 import { DynamicModule, Global, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { CommunitiesModule } from './communities/communities.module';
-import { UsersService } from './users/users.service';
-import { UsersController } from './users/users.controller';
-import { UsersModule } from './users/users.module';
+import { CommunityEventsModule } from './community-events/community-events.module';
 
 @Global()
 @Module({
-  imports: [ConfigModule.forRoot(), CommunitiesModule, UsersModule],
-  providers: [UsersService],
-  controllers: [UsersController],
+  imports: [ConfigModule.forRoot(), CommunitiesModule, CommunityEventsModule],
 })
 export class AppModule {
   static register(db: any): DynamicModule {

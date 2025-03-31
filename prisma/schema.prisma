@@ -8,17 +8,18 @@ generator client {
 }
 
 model User {
-  id             String          @id
-  name           String
-  email          String
-  emailVerified  Boolean
-  image          String?
-  createdAt      DateTime
-  updatedAt      DateTime
-  sessions       Session[]
-  accounts       Account[]
-  communities    Community[]
-  communityUsers CommunityUser[]
+  id                 String               @id
+  name               String
+  email              String
+  emailVerified      Boolean
+  image              String?
+  createdAt          DateTime
+  updatedAt          DateTime
+  sessions           Session[]
+  accounts           Account[]
+  communities        Community[]
+  communityUsers     CommunityUser[]
+  CommunityEventUser CommunityEventUser[]
 
   @@unique([email])
   @@map("user")
@@ -70,33 +71,80 @@ model Verification {
 }
 
 model Community {
-  id             String          @id @default(uuid())
+  id             String           @id @default(uuid())
   image          String
-  name           String          @unique()
-  slug           String          @unique()
+  name           String           @unique()
+  slug           String           @unique()
   state          String
   city           String
-  totalMembers   Int             @default(0)
+  totalMembers   Int              @default(0)
   description    String
   ownerId        String
-  owner          User            @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  owner          User             @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   category       String
   tags           String[]
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
   communityUsers CommunityUser[]
+  CommunityEvent CommunityEvent[]
 
   @@map("community")
 }
 
 model CommunityUser {
-  userId      String
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  communityId String
-  community   Community @relation(fields: [communityId], references: [id], onDelete: Cascade)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id                 String               @default(uuid())
+  userId             String
+  user               User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  communityId        String
+  community          Community            @relation(fields: [communityId], references: [id], onDelete: Cascade)
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  CommunityEventUser CommunityEventUser[]
 
-  @@id([communityId, userId])
+  @@id([id])
   @@map("community_user")
+}
+
+enum EventFormat {
+  IN_PERSON
+  VIRTUAL
+  BOTH
+}
+
+model CommunityEvent {
+  id                 String               @id @default(uuid())
+  name               String
+  description        String
+  date               DateTime
+  location           String?
+  format             EventFormat          @default(IN_PERSON)
+  calendarLink       String
+  communityId        String
+  community          Community            @relation(fields: [communityId], references: [id], onDelete: Cascade)
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  CommunityEventUser CommunityEventUser[]
+
+  @@map("community_event")
+}
+
+enum CommunityEventUserStatus {
+  ACCEPTED
+  NOT_ACCEPTED
+}
+
+model CommunityEventUser {
+  id               String                   @default(uuid())
+  communityUser    CommunityUser            @relation(fields: [communityUserId], references: [id], onDelete: Cascade)
+  communityUserId  String
+  status           CommunityEventUserStatus
+  communityEvent   CommunityEvent           @relation(fields: [communityEventId], references: [id], onDelete: Cascade)
+  communityEventId String
+  createdAt        DateTime                 @default(now())
+  updatedAt        DateTime                 @updatedAt
+  User             User?                    @relation(fields: [userId], references: [id])
+  userId           String?
+
+  @@id([id])
+  @@map("community_event_user")
 }

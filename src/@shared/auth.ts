@@ -19,13 +19,4 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
-  advanced: {
-    crossSubDomainCookies: {
-      enabled: true,
-    },
-    defaultCookieAttributes: {
-      sameSite: 'None',
-      domain: '.joaocansi.site',
-    },
-  },
 });
