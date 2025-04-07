@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { db } from 'src/@shared/db';
 import { PrismaClient } from '@prisma/client';
 import {
   CommunityEventRepository,
@@ -14,6 +13,8 @@ export default class CommunityEventRepositoryImpl
   constructor(private readonly db: PrismaClient) {}
 
   create(data: CreateCommunityEvent): Promise<CommunityEventSchema> {
-    return null;
+    return this.db.communityEvent.create({
+      data,
+    });
   }
 }

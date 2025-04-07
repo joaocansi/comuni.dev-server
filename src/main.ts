@@ -7,9 +7,9 @@ import { ValidationPipe } from '@nestjs/common';
 import { toNodeHandler } from 'better-auth/node';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { auth } from './@shared/auth';
-import { db } from './@shared/db';
-import { AppErrorExceptionFilter } from './@shared/filters/app-error.exception-filter';
+import { auth } from './@shared/auth/auth';
+import { db } from './@shared/db/db';
+import { AppErrorExceptionFilter } from './@nest/filters/app-error.exception-filter';
 
 import * as dotenv from 'dotenv';
 dotenv.config();

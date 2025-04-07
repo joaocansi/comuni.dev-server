@@ -8,6 +8,4 @@ export type CommunityEvent = {
   location?: string;
   format: CommunityEventFormat;
   calendarLink: string;
-  accepted: number;
-  rejected: number;
 };

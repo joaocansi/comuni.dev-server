@@ -3,8 +3,8 @@ import CommunityRepository from '../domain/community.repository';
 import { UpdateCommunityDTO } from '../dtos/update-community.dto';
 import { CommunitySchema } from '../domain/community.schema';
 import Community from '../domain/community';
-import { Usecase } from 'src/@shared/types/usecase';
-import { AppError, AppErrorType } from 'src/@shared/errors/app-error';
+import { Usecase } from 'src/@shared/usecase';
+import { AppError, AppErrorType } from 'src/@nest/errors/app-error';
 
 type IUpdateCommunityUsecase = UpdateCommunityDTO & {
   ownerId: string;

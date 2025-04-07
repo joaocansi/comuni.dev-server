@@ -3,7 +3,7 @@ import CommunityRepository, {
   CommunityPaginatedResult,
 } from '../domain/community.repository';
 import { GetCommunitiesDTO } from '../dtos/get-communities.dto';
-import { Usecase } from 'src/@shared/types/usecase';
+import { Usecase } from 'src/@shared/usecase';
 
 type IGetCommunitiesUsecase = GetCommunitiesDTO;
 type OGetCommunitiesUsecase = CommunityPaginatedResult;

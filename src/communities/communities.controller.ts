@@ -12,15 +12,13 @@ import { CreateCommunityDTO } from './dtos/create-community.dto';
 import {
   AuthenticatedUser,
   AuthUser,
-} from 'src/@shared/decorators/authenticated-user.decorator';
-import { AuthGuard } from 'src/@shared/guards/auth.guard';
+} from 'src/@nest/decorators/authenticated-user.decorator';
+import { AuthGuard } from 'src/@nest/guards/auth.guard';
 import { GetCommunitiesDTO } from './dtos/get-communities.dto';
 import { CreateCommunityUsecase } from './usecases/create-community.usecase';
 import { GetCommunityUsecase } from './usecases/get-community.usecase';
-import { JoinCommunityUsecase } from './usecases/join-community.usecase';
 import { GetCommunitiesUsecase } from './usecases/get-communities.usecase';
-import { NonRestrictedAuthGuard } from 'src/@shared/guards/non-restricted-auth.guard';
-import { LeaveCommunityUsecase } from './usecases/leave-community.usecase';
+import { NonRestrictedAuthGuard } from 'src/@nest/guards/non-restricted-auth.guard';
 import { UpdateCommunityUsecase } from './usecases/update-community.usecase';
 import { UpdateCommunityDTO } from './dtos/update-community.dto';
 
@@ -31,8 +29,6 @@ export class CommunitiesController {
     private readonly updateCommunityUsecase: UpdateCommunityUsecase,
     private readonly getCommunityUsecase: GetCommunityUsecase,
     private readonly getCommunitiesUsecase: GetCommunitiesUsecase,
-    private readonly joinCommunityUsecase: JoinCommunityUsecase,
-    private readonly leaveCommunityUsecase: LeaveCommunityUsecase,
   ) {}
 
   @UseGuards(AuthGuard)
@@ -77,23 +73,5 @@ export class CommunitiesController {
       communitySlug,
       userId: user?.id ?? null,
     });
-  }
-
-  @UseGuards(AuthGuard)
-  @Post('/:communityId/join')
-  async joinCommunity(
-    @Param('communityId') communityId: string,
-    @AuthenticatedUser() user: AuthUser,
-  ) {
-    return this.joinCommunityUsecase.execute({ communityId, userId: user.id });
-  }
-
-  @UseGuards(AuthGuard)
-  @Post('/:communityId/leave')
-  async leaveCommunity(
-    @Param('communityId') communityId: string,
-    @AuthenticatedUser() user: AuthUser,
-  ) {
-    return this.leaveCommunityUsecase.execute({ communityId, userId: user.id });
   }
 }

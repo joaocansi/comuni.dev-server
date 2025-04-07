@@ -6,9 +6,9 @@ import CommunityRepository, {
   UpdateCommunity,
 } from '../domain/community.repository';
 import { CommunitySchema } from '../domain/community.schema';
-import { db } from 'src/@shared/db';
+import { db } from 'src/@shared/db/db';
 import { PrismaClient } from '@prisma/client';
-import { PaginationOptions } from 'src/@shared/types/paginated';
+import { PaginationOptions } from 'src/@shared/paginated';
 
 @Injectable()
 export default class CommunityRepositoryImpl implements CommunityRepository {

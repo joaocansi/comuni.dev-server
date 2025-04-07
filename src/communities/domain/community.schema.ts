@@ -1,4 +1,4 @@
-import UserSchema from 'src/users/domain/user.schema';
+import { UserSchema } from 'src/users/domain/user.schema';
 import Community from './community';
 
 export class CommunitySchema {

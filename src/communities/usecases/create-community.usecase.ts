@@ -3,9 +3,9 @@ import CommunityRepository from '../domain/community.repository';
 import { CreateCommunityDTO } from '../dtos/create-community.dto';
 import { CommunitySchema } from '../domain/community.schema';
 import Community from '../domain/community';
-import { Usecase } from 'src/@shared/types/usecase';
+import { Usecase } from 'src/@shared/usecase';
 import { generateSlug } from 'src/@shared/utils/slug-generator';
-import { AppError, AppErrorType } from 'src/@shared/errors/app-error';
+import { AppError, AppErrorType } from 'src/@nest/errors/app-error';
 
 type ICreateCommunityUsecase = CreateCommunityDTO & {
   ownerId: string;

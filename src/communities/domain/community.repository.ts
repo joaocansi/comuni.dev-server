@@ -1,7 +1,7 @@
 import {
   PaginatedResult,
   PaginationOptions,
-} from 'src/@shared/types/paginated';
+} from 'src/@shared/paginated';
 import { CommunitySchema } from './community.schema';
 
 export type CreateCommunity = {

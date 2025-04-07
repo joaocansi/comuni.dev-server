@@ -6,7 +6,9 @@ export type CreateCommunityEvent = {
   name: string;
   description: string;
   date: Date;
-  location?: string;
+  state?: string;
+  city?: string;
+  address?: string;
   format: CommunityEventFormat;
   calendarLink: string;
   communityId: string;

@@ -5,7 +5,9 @@ export type CreateCommunityEventDTO = {
   name: string;
   description: string;
   date: Date;
-  location?: string;
+  address?: string;
+  state?: string;
+  city?: string;
   format: CommunityEventFormat;
   calendarLink: string;
   communityId: string;
