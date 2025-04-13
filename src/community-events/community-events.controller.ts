@@ -16,7 +16,7 @@ import {
 import { CreateCommunityEventDTO } from './dtos/create-community-event.dto';
 import { UpdateCommunityEventDTO } from './dtos/update-community-event.dto';
 import { DeleteCommunityEventUseCase } from './usecases/delete-community-event.usecase';
-import { UpdateCommunityEventUsecase } from './usecases/update-community-event.usecase copy';
+import { UpdateCommunityEventUsecase } from './usecases/update-community-event.usecase';
 
 @Controller('community-events')
 export class CommunityEventsController {
