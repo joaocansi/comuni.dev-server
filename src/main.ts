@@ -17,8 +17,6 @@ dotenv.config();
 async function bootstrap() {
   const adapter = express();
 
-  console.log(process.env.BETTER_AUTH_URL);
-
   adapter.use(
     cors({
       origin: process.env.FRONTEND_URL,
@@ -42,7 +40,12 @@ async function bootstrap() {
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, documentFactory);
 
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      forbidNonWhitelisted: true,
+      whitelist: true,
+    }),
+  );
   app.useGlobalFilters(new AppErrorExceptionFilter());
   await app.listen(process.env.PORT ?? 3000);
 }

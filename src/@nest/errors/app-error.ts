@@ -8,6 +8,7 @@ export enum AppErrorType {
   USER_ALREADY_JOINED = 'USER_ALREADY_JOINED',
   OWNER_CANNOT_JOIN = 'OWNER_CANNOT_JOIN',
   NOT_MEMBER = 'NOT_MEMBER',
+  COMMUNITY_EVENT_NOT_FOUND = 'COMMUNITY_EVENT_NOT_FOUND',
 }
 
 export const ERROR_STATUS_CODES: Record<AppErrorType, number> = {
@@ -20,6 +21,7 @@ export const ERROR_STATUS_CODES: Record<AppErrorType, number> = {
   [AppErrorType.OWNER_CANNOT_JOIN]: 400,
   [AppErrorType.NOT_MEMBER]: 404,
   [AppErrorType.COMMUNITY_UNAUTHORIZED]: 401,
+  [AppErrorType.COMMUNITY_EVENT_NOT_FOUND]: 404,
 };
 
 export const getStatusCode = (errorType: AppErrorType): number => {

@@ -69,21 +69,21 @@ model Verification {
 }
 
 model Community {
-  id             String           @id @default(uuid())
-  image          String
-  name           String           @unique()
-  slug           String           @unique()
-  state          String
-  city           String
-  totalMembers   Int              @default(0)
-  description    String
-  ownerId        String
-  owner          User             @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  category       String
-  tags           String[]
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
-  CommunityEvent CommunityEvent[]
+  id              String           @id @default(uuid())
+  image           String
+  name            String           @unique()
+  slug            String           @unique()
+  state           String
+  city            String
+  totalMembers    Int              @default(0)
+  description     String
+  ownerId         String
+  owner           User             @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  category        String
+  tags            String[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  communityEvents CommunityEvent[]
 
   @@map("community")
 }

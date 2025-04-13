@@ -1,3 +1,5 @@
+import { CommunityEvent } from 'src/community-events/domain/community-event';
+
 export default class Community {
   id: string;
   image: string;
@@ -13,6 +15,7 @@ export default class Community {
     email: string;
     image: string;
   };
+  communityEvents?: CommunityEvent[];
   description: string;
   tags: string[];
   createdAt: Date;

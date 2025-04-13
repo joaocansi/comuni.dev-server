@@ -6,7 +6,9 @@ export class CommunityEventSchema {
   name: string;
   description: string;
   date: Date;
-  location?: string;
+  state?: string;
+  city?: string;
+  address?: string;
   format: CommunityEventFormat;
   calendarLink: string;
   communityId: string;
@@ -15,14 +17,23 @@ export class CommunityEventSchema {
   updatedAt: Date;
 
   static toDomain(schema: CommunityEventSchema): CommunityEvent {
-    return {
+    const object = {
       id: schema.id,
       calendarLink: schema.calendarLink,
       date: schema.date,
-      location: schema.location,
       description: schema.description,
       format: schema.format,
       name: schema.name,
-    };
+    } as CommunityEvent;
+
+    if (schema.format !== 'VIRTUAL') {
+      object.location = {
+        state: schema.state,
+        city: schema.city,
+        address: schema.address,
+      };
+    }
+
+    return object;
   }
 }

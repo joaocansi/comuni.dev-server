@@ -1,9 +1,10 @@
 import { UserSchema } from 'src/users/domain/user.schema';
 import Community from './community';
+import { CommunityEventSchema } from 'src/community-events/domain/community-event.schema';
 
 export class CommunitySchema {
   id: string;
-  owner: UserSchema;
+  owner?: UserSchema;
   ownerId: string;
   createdAt: Date;
   updatedAt: Date;
@@ -16,6 +17,7 @@ export class CommunitySchema {
   description: string;
   totalMembers: number;
   tags: string[];
+  communityEvents?: CommunityEventSchema[];
 
   static toDomain(schema: CommunitySchema): Community {
     const object = {
@@ -39,6 +41,11 @@ export class CommunitySchema {
         image: schema.owner.image,
         name: schema.owner.name,
       };
+
+    if (schema.communityEvents)
+      object.communityEvents = schema.communityEvents.map((item) =>
+        CommunityEventSchema.toDomain(item),
+      );
 
     return object;
   }

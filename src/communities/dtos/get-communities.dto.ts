@@ -1,10 +1,26 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString } from 'class-validator';
+import { Transform } from 'class-transformer';
+import {
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  Max,
+  Min,
+} from 'class-validator';
 
 export class GetCommunitiesDTO {
-  @ApiProperty({ required: false, type: Number })
+  @ApiProperty({ required: false, type: Number, minimum: 1, maximum: 30 })
+  @Transform(({ value }) => Number(value))
+  @IsInt()
+  @Min(1)
+  @Max(30)
   limit: string;
-  @ApiProperty({ required: false, type: Number })
+  @ApiProperty({ required: false, type: Number, minimum: 1 })
+  @Transform(({ value }) => Number(value))
+  @IsInt()
+  @Min(1)
+  @IsNotEmpty()
   page: string;
   @IsString()
   @IsOptional()

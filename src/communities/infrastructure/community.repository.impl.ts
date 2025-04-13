@@ -27,6 +27,13 @@ export default class CommunityRepositoryImpl implements CommunityRepository {
             email: true,
           },
         },
+        communityEvents: {
+          where: {
+            date: {
+              gt: new Date(),
+            },
+          },
+        },
       },
     });
   }

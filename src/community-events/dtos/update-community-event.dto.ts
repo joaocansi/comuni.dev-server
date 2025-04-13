@@ -12,7 +12,7 @@ import {
   CommunityEventFormatValues,
 } from '../domain/community-event';
 
-export class CreateCommunityEventDTO {
+export class UpdateCommunityEventDTO {
   @IsString()
   @IsNotEmpty()
   name: string;
@@ -24,7 +24,6 @@ export class CreateCommunityEventDTO {
   @Type(() => Date)
   @IsDate()
   @IsNotEmpty()
-  @ValidateIf((o) => o.date > new Date(Date.now() + 60 * 60 * 1000))
   date: Date;
 
   @ValidateIf((o) => o.format !== 'VIRTUAL')
@@ -50,8 +49,4 @@ export class CreateCommunityEventDTO {
   @IsUrl()
   @IsNotEmpty()
   calendarLink: string;
-
-  @IsString()
-  @IsNotEmpty()
-  communityId: string;
 }
