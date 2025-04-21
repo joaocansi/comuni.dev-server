@@ -9,27 +9,18 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { CreateCommunityDTO } from './dtos/create-community.dto';
+import { GetCommunitiesDTO } from './dtos/get-communities.dto';
+import { UpdateCommunityDTO } from './dtos/update-community.dto';
+import { CommunitiesService } from './communities.service';
+import { AuthGuard } from 'src/shared/@nest/guards/auth.guard';
 import {
   AuthenticatedUser,
   AuthUser,
-} from 'src/@nest/decorators/authenticated-user.decorator';
-import { AuthGuard } from 'src/@nest/guards/auth.guard';
-import { GetCommunitiesDTO } from './dtos/get-communities.dto';
-import { CreateCommunityUsecase } from './usecases/create-community.usecase';
-import { GetCommunityUsecase } from './usecases/get-community.usecase';
-import { GetCommunitiesUsecase } from './usecases/get-communities.usecase';
-import { NonRestrictedAuthGuard } from 'src/@nest/guards/non-restricted-auth.guard';
-import { UpdateCommunityUsecase } from './usecases/update-community.usecase';
-import { UpdateCommunityDTO } from './dtos/update-community.dto';
+} from 'src/shared/@nest/decorators/authenticated-user.decorator';
 
 @Controller('communities')
 export class CommunitiesController {
-  constructor(
-    private readonly createCommunityUsecase: CreateCommunityUsecase,
-    private readonly updateCommunityUsecase: UpdateCommunityUsecase,
-    private readonly getCommunityUsecase: GetCommunityUsecase,
-    private readonly getCommunitiesUsecase: GetCommunitiesUsecase,
-  ) {}
+  constructor(private readonly communitiesService: CommunitiesService) {}
 
   @UseGuards(AuthGuard)
   @Post()
@@ -37,7 +28,7 @@ export class CommunitiesController {
     @Body() dto: CreateCommunityDTO,
     @AuthenticatedUser() user: AuthUser,
   ) {
-    return this.createCommunityUsecase.execute({
+    return this.communitiesService.create({
       ...dto,
       ownerId: user.id,
     });
@@ -50,28 +41,31 @@ export class CommunitiesController {
     @Body() dto: UpdateCommunityDTO,
     @AuthenticatedUser() user: AuthUser,
   ) {
-    return this.updateCommunityUsecase.execute({
+    return this.communitiesService.update({
       ...dto,
       id: communityId,
       ownerId: user.id,
     });
   }
 
-  @UseGuards(NonRestrictedAuthGuard)
   @Get()
   async getCommunities(@Query() query: GetCommunitiesDTO) {
-    return this.getCommunitiesUsecase.execute(query);
+    const { page, limit, state, city, tags } = query;
+    const filters = {
+      ...(state && { state }),
+      ...(city && { city }),
+      ...(tags && { tags }),
+    };
+    const paginationOptions = {
+      page: Number(page) || 1,
+      limit: Number(limit) || 10,
+      filters,
+    };
+    return this.communitiesService.getPaginatedCommunities(paginationOptions);
   }
 
-  @UseGuards(NonRestrictedAuthGuard)
-  @Get('/:communitySlug')
-  async getCommunity(
-    @Param('communitySlug') communitySlug: string,
-    @AuthenticatedUser() user: AuthUser,
-  ) {
-    return this.getCommunityUsecase.execute({
-      communitySlug,
-      userId: user?.id ?? null,
-    });
+  @Get('/:slug')
+  async getCommunity(@Param('slug') slug: string) {
+    return this.communitiesService.getCommunity({ slug });
   }
 }

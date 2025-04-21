@@ -84,6 +84,7 @@ model Community {
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
   communityEvents CommunityEvent[]
+  communityLinks  Json[]
 
   @@map("community")
 }

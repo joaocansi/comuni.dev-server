@@ -1,4 +1,5 @@
 import { CommunityEvent } from 'src/community-events/domain/community-event';
+import { CommunityLink } from './community-link';
 
 export default class Community {
   id: string;
@@ -16,6 +17,7 @@ export default class Community {
     image: string;
   };
   communityEvents?: CommunityEvent[];
+  communityLinks?: CommunityLink[];
   description: string;
   tags: string[];
   createdAt: Date;

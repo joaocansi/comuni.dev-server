@@ -1,6 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import {
+  IsArray,
+  IsIn,
   IsInt,
   IsNotEmpty,
   IsOptional,
@@ -8,6 +10,7 @@ import {
   Max,
   Min,
 } from 'class-validator';
+import { tags } from 'src/shared/constants/tags.constant';
 
 export class GetCommunitiesDTO {
   @ApiProperty({ required: false, type: Number, minimum: 1, maximum: 30 })
@@ -25,17 +28,14 @@ export class GetCommunitiesDTO {
   @IsString()
   @IsOptional()
   @ApiProperty({ required: false })
-  category?: string;
-  @IsString()
-  @IsOptional()
-  @ApiProperty({ required: false })
   state?: string;
   @IsString()
   @IsOptional()
   @ApiProperty({ required: false })
   city?: string;
-  @IsString()
+  @IsArray()
+  @IsIn(tags)
   @IsOptional()
   @ApiProperty({ required: false })
-  tag?: string;
+  tags?: string[];
 }

@@ -7,23 +7,19 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from 'src/@nest/guards/auth.guard';
-import { CreateCommunityEventUsecase } from './usecases/create-community-event.usecase';
 import {
   AuthenticatedUser,
   AuthUser,
-} from 'src/@nest/decorators/authenticated-user.decorator';
+} from 'src/shared/@nest/decorators/authenticated-user.decorator';
+import { AuthGuard } from 'src/shared/@nest/guards/auth.guard';
+import { CommunityEventsService } from './community-events.service';
 import { CreateCommunityEventDTO } from './dtos/create-community-event.dto';
 import { UpdateCommunityEventDTO } from './dtos/update-community-event.dto';
-import { DeleteCommunityEventUseCase } from './usecases/delete-community-event.usecase';
-import { UpdateCommunityEventUsecase } from './usecases/update-community-event.usecase';
 
 @Controller('community-events')
 export class CommunityEventsController {
   constructor(
-    private readonly createCommunityEventUsecase: CreateCommunityEventUsecase,
-    private readonly updateCommunityEventUsecase: UpdateCommunityEventUsecase,
-    private readonly deleteCommunityEventUsecase: DeleteCommunityEventUseCase,
+    private readonly communityEventsService: CommunityEventsService,
   ) {}
 
   @UseGuards(AuthGuard)
@@ -32,7 +28,7 @@ export class CommunityEventsController {
     @Body() dto: CreateCommunityEventDTO,
     @AuthenticatedUser() user: AuthUser,
   ) {
-    return this.createCommunityEventUsecase.execute({
+    return this.communityEventsService.create({
       ...dto,
       userId: user.id,
     });
@@ -45,7 +41,7 @@ export class CommunityEventsController {
     @Param('communityEventId') communityEventId: string,
     @AuthenticatedUser() user: AuthUser,
   ) {
-    return this.updateCommunityEventUsecase.execute({
+    return this.communityEventsService.update({
       ...dto,
       id: communityEventId,
       userId: user.id,
@@ -58,7 +54,7 @@ export class CommunityEventsController {
     @Param('communityEventId') communityEventId: string,
     @AuthenticatedUser() user: AuthUser,
   ) {
-    return this.deleteCommunityEventUsecase.execute({
+    return this.communityEventsService.delete({
       id: communityEventId,
       userId: user.id,
     });

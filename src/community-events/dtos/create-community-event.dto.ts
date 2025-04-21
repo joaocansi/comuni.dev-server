@@ -5,12 +5,19 @@ import {
   IsEnum,
   IsUrl,
   ValidateIf,
+  IsIn,
+  Validate,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import {
   CommunityEventFormat,
   CommunityEventFormatValues,
 } from '../domain/community-event';
+import { ApiProperty } from '@nestjs/swagger';
+import {
+  CityMatchesStateConstraint,
+  STATES,
+} from 'src/shared/constants/location.constant';
 
 export class CreateCommunityEventDTO {
   @IsString()
@@ -30,16 +37,15 @@ export class CreateCommunityEventDTO {
   @ValidateIf((o) => o.format !== 'VIRTUAL')
   @IsString()
   @IsNotEmpty()
-  address?: string;
-
-  @ValidateIf((o) => o.format !== 'VIRTUAL')
-  @IsString()
-  @IsNotEmpty()
+  @IsIn(STATES)
+  @ApiProperty()
   state?: string;
 
   @ValidateIf((o) => o.format !== 'VIRTUAL')
   @IsString()
   @IsNotEmpty()
+  @Validate(CityMatchesStateConstraint)
+  @ApiProperty()
   city?: string;
 
   @IsString()

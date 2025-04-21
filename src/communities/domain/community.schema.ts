@@ -1,6 +1,7 @@
 import { UserSchema } from 'src/users/domain/user.schema';
 import Community from './community';
 import { CommunityEventSchema } from 'src/community-events/domain/community-event.schema';
+import { CommunityLink } from './community-link';
 
 export class CommunitySchema {
   id: string;
@@ -17,6 +18,7 @@ export class CommunitySchema {
   description: string;
   totalMembers: number;
   tags: string[];
+  communityLinks: CommunityLink[];
   communityEvents?: CommunityEventSchema[];
 
   static toDomain(schema: CommunitySchema): Community {
@@ -32,6 +34,7 @@ export class CommunitySchema {
       totalMembers: schema.totalMembers,
       createdAt: schema.createdAt,
       category: schema.category,
+      communityLinks: schema.communityLinks,
     } as Community;
 
     if (schema.owner)

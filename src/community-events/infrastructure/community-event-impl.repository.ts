@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
+import { Community, CommunityEvent, PrismaClient } from '@prisma/client';
 import {
   CommunityEventRepository,
   CreateCommunityEvent,
   UpdateCommunityEvent,
 } from '../domain/community-event.repository';
 import { CommunityEventSchema } from '../domain/community-event.schema';
+import { CommunityLink } from 'src/communities/domain/community-link';
 
 @Injectable()
 export default class CommunityEventRepositoryImpl
@@ -13,8 +14,47 @@ export default class CommunityEventRepositoryImpl
 {
   constructor(private readonly db: PrismaClient) {}
 
-  findById(id: string): Promise<CommunityEventSchema> {
-    return this.db.communityEvent.findUnique({
+  // This method is used to convert the CommunityEvent object from the database
+  // to the CommunityEventSchema object that is used in the application.
+  // It includes the community information and maps the community links to the
+  // CommunityLink type.
+  private convertToCommunityEventSchema(
+    communityEvent: CommunityEvent & { community: Community },
+  ): CommunityEventSchema | null {
+    if (!communityEvent) {
+      return null;
+    }
+
+    const communityLinks = this.mapCommunityLinks(
+      communityEvent.community.communityLinks,
+    );
+
+    const community = {
+      ...communityEvent.community,
+      communityLinks,
+    };
+
+    return {
+      ...communityEvent,
+      community,
+    };
+  }
+
+  // This method is used to map the community links from the database
+  // to the CommunityLink type that is used in the application.
+  private mapCommunityLinks(links: any): CommunityLink[] {
+    if (!Array.isArray(links)) {
+      return [];
+    }
+
+    return links.map((link: any) => ({
+      name: link.name,
+      value: link.value,
+    }));
+  }
+
+  async findById(id: string): Promise<CommunityEventSchema> {
+    const communityEvent = await this.db.communityEvent.findUnique({
       where: {
         id,
       },
@@ -22,6 +62,7 @@ export default class CommunityEventRepositoryImpl
         community: true,
       },
     });
+    return this.convertToCommunityEventSchema(communityEvent);
   }
 
   create(data: CreateCommunityEvent): Promise<CommunityEventSchema> {

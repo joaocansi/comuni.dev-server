@@ -6,27 +6,52 @@ import CommunityRepository, {
   UpdateCommunity,
 } from '../domain/community.repository';
 import { CommunitySchema } from '../domain/community.schema';
-import { db } from 'src/@shared/db/db';
-import { PrismaClient } from '@prisma/client';
-import { PaginationOptions } from 'src/@shared/paginated';
+import { db } from 'src/shared/db/db';
+import { Community, PrismaClient } from '@prisma/client';
+import { PaginationOptions } from 'src/shared/paginated';
+import { CommunityLink } from '../domain/community-link';
 
 @Injectable()
 export default class CommunityRepositoryImpl implements CommunityRepository {
   constructor(private readonly db: PrismaClient) {}
-  findBySlug(slug: string): Promise<CommunitySchema> {
-    return db.community.findFirst({
+
+  private readonly defaultInclude = {
+    owner: {
+      select: {
+        id: true,
+        name: true,
+        image: true,
+        email: true,
+      },
+    },
+  };
+
+  // This method is used to convert the Community object from the database
+  // to the CommunitySchema object that is used in the application.
+  // It includes the community links and maps them to the CommunityLink type.
+  private convertToCommunitySchema(community: Community): CommunitySchema {
+    if (!community) {
+      return null;
+    }
+
+    const communityLinks = community.communityLinks?.map((link: any) => ({
+      name: link.name,
+      value: link.value,
+    })) as CommunityLink[] | undefined;
+
+    return {
+      ...community,
+      communityLinks,
+    };
+  }
+
+  async findBySlug(slug: string): Promise<CommunitySchema> {
+    const community = await db.community.findFirst({
       where: {
         slug,
       },
       include: {
-        owner: {
-          select: {
-            id: true,
-            name: true,
-            image: true,
-            email: true,
-          },
-        },
+        ...this.defaultInclude,
         communityEvents: {
           where: {
             date: {
@@ -36,24 +61,18 @@ export default class CommunityRepositoryImpl implements CommunityRepository {
         },
       },
     });
+
+    return this.convertToCommunitySchema(community);
   }
 
-  findByName(name: string): Promise<CommunitySchema> {
-    return db.community.findFirst({
+  async findByName(name: string): Promise<CommunitySchema> {
+    const community = await db.community.findFirst({
       where: {
         name,
       },
-      include: {
-        owner: {
-          select: {
-            id: true,
-            name: true,
-            image: true,
-            email: true,
-          },
-        },
-      },
+      include: this.defaultInclude,
     });
+    return this.convertToCommunitySchema(community);
   }
 
   async findPaginated(
@@ -74,19 +93,7 @@ export default class CommunityRepositoryImpl implements CommunityRepository {
         where,
         skip,
         take: limit,
-        omit: {
-          ownerId: true,
-        },
-        include: {
-          owner: {
-            select: {
-              id: true,
-              name: true,
-              image: true,
-              email: true,
-            },
-          },
-        },
+        include: this.defaultInclude,
         orderBy: {
           createdAt: 'desc',
         },
@@ -104,38 +111,34 @@ export default class CommunityRepositoryImpl implements CommunityRepository {
   }
 
   async findById(id: string): Promise<CommunitySchema> {
-    return db.community.findFirst({
+    const community = await db.community.findFirst({
       where: {
         id,
       },
-      include: {
-        owner: {
-          select: {
-            id: true,
-            name: true,
-            image: true,
-            email: true,
-          },
-        },
-      },
+      include: this.defaultInclude,
     });
+    return this.convertToCommunitySchema(community);
   }
 
-  create(data: CreateCommunity): Promise<Omit<CommunitySchema, 'owner'>> {
-    return db.community.create({
+  async create(data: CreateCommunity): Promise<Omit<CommunitySchema, 'owner'>> {
+    const community = await db.community.create({
       data,
+      include: this.defaultInclude,
     });
+    return this.convertToCommunitySchema(community);
   }
 
-  update({
+  async update({
     id,
     ...data
   }: UpdateCommunity): Promise<Omit<CommunitySchema, 'owner'>> {
-    return db.community.update({
+    const community = await db.community.update({
       where: {
         id,
       },
       data,
+      include: this.defaultInclude,
     });
+    return this.convertToCommunitySchema(community);
   }
 }

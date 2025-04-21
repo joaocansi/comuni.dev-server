@@ -2,11 +2,20 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   ArrayMinSize,
   IsArray,
+  IsIn,
   IsNotEmpty,
   IsString,
   IsUrl,
   MinLength,
+  Validate,
+  ValidateNested,
 } from 'class-validator';
+import { Type } from 'class-transformer';
+import { CommunityLinkDTO } from './defaults/community-link.dto';
+import {
+  CityMatchesStateConstraint,
+  STATES,
+} from 'src/shared/constants/location.constant';
 
 export class CreateCommunityDTO {
   @IsUrl()
@@ -24,11 +33,13 @@ export class CreateCommunityDTO {
 
   @IsString()
   @IsNotEmpty()
+  @IsIn(STATES)
   @ApiProperty()
   state: string;
 
   @IsString()
   @IsNotEmpty()
+  @Validate(CityMatchesStateConstraint)
   @ApiProperty()
   city: string;
 
@@ -41,4 +52,10 @@ export class CreateCommunityDTO {
   @IsNotEmpty()
   @ApiProperty()
   category: string;
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CommunityLinkDTO)
+  @ApiProperty({ type: [CommunityLinkDTO] })
+  communityLinks: CommunityLinkDTO[];
 }

@@ -15,14 +15,14 @@ export type CreateCommunityEvent = {
 
 export type UpdateCommunityEvent = {
   id: string;
-  name: string;
-  description: string;
-  date: Date;
+  name?: string;
+  description?: string;
+  date?: Date;
   state?: string;
   city?: string;
   address?: string;
-  format: CommunityEventFormat;
-  calendarLink: string;
+  format?: CommunityEventFormat;
+  calendarLink?: string;
 };
 
 export interface CommunityEventRepository {

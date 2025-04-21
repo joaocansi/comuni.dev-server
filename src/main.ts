@@ -7,11 +7,11 @@ import { ValidationPipe } from '@nestjs/common';
 import { toNodeHandler } from 'better-auth/node';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { auth } from './@shared/auth/auth';
-import { db } from './@shared/db/db';
-import { AppErrorExceptionFilter } from './@nest/filters/app-error.exception-filter';
+import { auth } from './shared/auth/auth';
+import { db } from './shared/db/db';
 
 import * as dotenv from 'dotenv';
+import { AppErrorExceptionFilter } from './shared/@nest/filters/app-error.exception-filter';
 dotenv.config();
 
 async function bootstrap() {
@@ -43,6 +43,7 @@ async function bootstrap() {
   app.useGlobalPipes(
     new ValidationPipe({
       forbidNonWhitelisted: true,
+      transform: true,
       whitelist: true,
     }),
   );
